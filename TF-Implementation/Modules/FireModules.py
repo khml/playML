@@ -11,6 +11,7 @@ def fire_module(inputs, squeeze_num, expand, name):
     :param name: str
     :return: Tensor
     """
+
     def conv2d(input_tensor, filter_num, kernel, stride, name):
         return tf.layers.conv2d(input=input_tensor, filter=filter_num, kernel_size=(kernel, kernel),
                                 stride=(stride, stride), padding='same', name=name)
@@ -24,4 +25,20 @@ def fire_module(inputs, squeeze_num, expand, name):
 
         # channel last
         out = tf.concat([expand_1x1, expand_3x3], axis=-1)
+        return out
+
+
+def fire_module_with_shortcut(inputs, squeeze_num, expand, name):
+    """
+    :param inputs:
+    :param squeeze_num:
+    :param expand:
+    :param name:
+    :return:
+    """
+    with tf.variable_scope(name, 'FireModuleWithShortcut'):
+        fire1 = fire_module(inputs=inputs, squeeze_num=squeeze_num, expand=expand, name='Fire1')
+        fire2 = fire_module(inputs=fire1, squeeze_num=squeeze_num, expand=expand, name='Fire1')
+        out = fire1 + fire2
+
         return out
