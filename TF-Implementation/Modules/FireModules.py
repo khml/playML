@@ -3,18 +3,19 @@
 import tensorflow as tf
 
 
-def fire_module(inputs, squeeze_num, expand, name):
+def fire_module(inputs, squeeze_num, expand, name, activation=tf.nn.relu):
     """
     :param inputs: Tensor
     :param squeeze_num: int
     :param expand: int
     :param name: str
+    :param activation: Non Linear Activation Function
     :return: Tensor
     """
 
     def conv2d(input_tensor, filter_num, kernel, stride, name):
         return tf.layers.conv2d(input=input_tensor, filter=filter_num, kernel_size=(kernel, kernel),
-                                stride=(stride, stride), padding='same', name=name)
+                                stride=(stride, stride), padding='same', activation=activation, name=name)
 
     expand_num = expand // 2
 
